@@ -3,5 +3,18 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    {% for auction in auctions %}
+        <div class="auction">
+            <h3>{{ auction.title }}</h3>
+            
+            {% if auction.img != 'none' %}
+                <div class="auction-img">
+                    <img src="{{ auction.img }}" alt="">
+                </div>
+            {% endif %}
+            
+            <div class="auction-description">{{ auction.description }}</div>
+            <div class="auction-price">Price: {{ auction.price }}</div>
+        </div>
+    {% endfor %}
 {% endblock %}

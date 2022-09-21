@@ -1,0 +1,39 @@
+{% extends auctions/layout.html %}
+
+<div class="auction-listing">
+    <h3>{{ auction.title }}</h3>
+    {% if auction.img != 'none' %}
+        <div class="auction-img">
+            <img src="{{ auction.img }}" alt="">
+        </div>
+    {% endif %}
+    <div class="auction-description">{{ auction.description }}</div>
+    <div class="auction-price">Price: {{ auction.price }}</div>
+
+    <form action="">
+        {% csrf_token %}
+        <input type="number" , value={{ auction.price }}>
+        <input type="submit", class="btn btn-primary" value="Place bid">
+    </form>
+
+
+    <div class="history">
+        <ul>
+        {% for bid in historyBid %}
+            <li> {{ bid.price }} by {{ bid.author }}
+        {% endfor %}           
+    </div>
+
+    <h3> Details </h3>
+        <ul>
+            <li>Listed by {{ auction.author}}</li>
+            <li>category {{auction.category}}</li>
+            <li>Auction was created: {{ auction.startDate }} </li>
+            <li>Auction expire date: {{ auction.endDate }}</li>
+        </ul>
+
+
+
+</div>
+
+{% endblock%}
