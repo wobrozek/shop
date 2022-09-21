@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Auction
+from .models import User, Auction, Bid
 
 
 def index(request):
@@ -15,7 +15,7 @@ def index(request):
 
 def watchlist(request):
     return render(request, "auctions/index.html",{
-        "auctions": request.user.watchlist.all()
+        "auctions": request.User.watchlist.all()
     })
 
 def categories(request):
@@ -25,6 +25,14 @@ def categories(request):
 
 def create(reqest):
     return render(reqest, "auctions/create.html")
+
+def listing(reqest,listing_id):
+    aukcja =Auction.objects.get(id=listing_id)
+    return render(reqest, "auctions/listing.html",{
+        "auction": aukcja,
+        "historyBid":Bid.object.get(auction=aukcja)
+    })
+
 
 def login_view(request):
     if request.method == "POST":

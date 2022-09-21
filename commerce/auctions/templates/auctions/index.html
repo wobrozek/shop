@@ -5,16 +5,18 @@
 
     {% for auction in auctions %}
         <div class="auction">
-            <h3>{{ auction.title }}</h3>
+            <a href={% url "'listing'/{{ auction.id }}" %}>
+                <h3>{{ auction.title }}</h3>
             
-            {% if auction.img != 'none' %}
-                <div class="auction-img">
-                    <img src="{{ auction.img }}" alt="">
-                </div>
-            {% endif %}
+                {% if auction.img != 'none' %}
+                    <div class="auction-img">
+                        <img src="{{ auction.img }}" alt="">
+                    </div>
+                {% endif %}
             
-            <div class="auction-description">{{ auction.description }}</div>
-            <div class="auction-price">Price: {{ auction.price }}</div>
+                <div class="auction-description">{{ auction.description }}</div>
+                <div class="auction-price">Price: {{ auction.price }}</div>
+            </a>
         </div>
     {% endfor %}
 {% endblock %}
