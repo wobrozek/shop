@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 from .models import User, Auction, Bid
 
@@ -13,6 +14,7 @@ def index(request):
     })
 
 
+@login_required
 def watchlist(request):
     return render(request, "auctions/index.html",{
         "auctions": request.User.watchlist.all()
@@ -20,9 +22,11 @@ def watchlist(request):
 
 def categories(request):
     return render(request, "auctions/categories.html",{
-        "categories": Auction.CategoryChoices.choices
+        "categories": Auction.CategoryChoices.labels       
     })
 
+
+@login_required
 def create(reqest):
     return render(reqest, "auctions/create.html")
 

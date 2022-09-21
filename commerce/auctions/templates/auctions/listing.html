@@ -1,5 +1,7 @@
 {% extends auctions/layout.html %}
 
+{% block body%}
+
 <div class="auction-listing">
     <h3>{{ auction.title }}</h3>
     {% if auction.img != 'none' %}
@@ -31,9 +33,6 @@
             <li>Auction was created: {{ auction.startDate }} </li>
             <li>Auction expire date: {{ auction.endDate }}</li>
         </ul>
-
-
-
 </div>
 
 {% endblock%}

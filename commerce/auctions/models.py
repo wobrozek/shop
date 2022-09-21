@@ -14,6 +14,8 @@ class Auction(models.Model):
         ELECTRONICS = "EL", gettext_lazy("ELECTRONICS")
         HOME = "HO", gettext_lazy("HOME")
         CARS = "CR", gettext_lazy("CARS")
+    
+
 
     author=models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=64)
