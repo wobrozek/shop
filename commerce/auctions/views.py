@@ -38,12 +38,12 @@ def create_view(reqest):
         img=reqest.POST["img"]
 
         #check if date is in the future
-        endDate=reqest.POST["endDate"]
-        # if endDate < datetime.now():
-        #     return render(reqest, "auctions/create.html",{
-        #     "messages":"The end of auction date must be in the future",
-        #     "categories": Auction.CategoryChoices.labels
-        #     })
+        endDate=datetime.strptime(reqest.POST["endDate"],"%Y-%m-%dT%H:%M")
+        if endDate < datetime.now():
+            return render(reqest, "auctions/create.html",{
+            "message":"The end of auction date must be in the future",
+            "categories": Auction.CategoryChoices.labels
+            })
 
         price=int(reqest.POST["price"])
         #check if price is positiv number
