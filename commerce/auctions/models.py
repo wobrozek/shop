@@ -17,13 +17,13 @@ class Auction(models.Model):
     
 
 
-    author=models.ForeignKey(User, on_delete=models.CASCADE)
+    author=models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctions")
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=512)
     img = models.CharField(max_length=512, default='none')
     price = models.FloatField()
     category = models.CharField(max_length=2, choices=CategoryChoices.choices)
-    author = models.ForeignKey(User, on_delete=models.CASCADE ,related_name="auctions")
+    author = models.ForeignKey(User, on_delete=models.CASCADE ,)
     subscribers = models.ManyToManyField(User, blank=True, related_name="watchlist")
     startDate = models.DateTimeField(auto_now=True)
     endDate = models.DateTimeField()

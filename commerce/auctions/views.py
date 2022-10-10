@@ -1,3 +1,7 @@
+from datetime import datetime
+from email import message
+from turtle import title
+from unicodedata import category
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -15,26 +19,68 @@ def index(request):
 
 
 @login_required
-def watchlist(request):
+def watchlist_view(request):
     return render(request, "auctions/index.html",{
-        "auctions": request.User.watchlist.all()
+        "auctions": request.user.watchlist.all()
     })
 
-def categories(request):
+def categories_view(request):
     return render(request, "auctions/categories.html",{
         "categories": Auction.CategoryChoices.labels       
     })
 
 
 @login_required
-def create(reqest):
-    return render(reqest, "auctions/create.html")
+def create_view(reqest):
+    if reqest.method=="POST":
+        title=reqest.POST["title"]
+        description=reqest.POST["description"]
+        img=reqest.POST["img"]
 
-def listing(reqest,listing_id):
+        #check if date is in the future
+        endDate=reqest.POST["endDate"]
+        # if endDate < datetime.now():
+        #     return render(reqest, "auctions/create.html",{
+        #     "messages":"The end of auction date must be in the future",
+        #     "categories": Auction.CategoryChoices.labels
+        #     })
+
+        price=int(reqest.POST["price"])
+        #check if price is positiv number
+        if price < 0:
+            return render(reqest, "auctions/create.html",{
+            "message":"The price must be greater than zero",
+            "categories": Auction.CategoryChoices.labels
+            })
+        category=reqest.POST["category"]
+
+        try:
+            aukcja = Auction.objects.create(author=reqest.user,title=title,description=description,img=img,endDate=endDate,price=price,category=category)
+            aukcja.save()
+        except IntegrityError:
+            render(reqest, "auctions/create.html",{
+                "message":"All required field must be",
+                "categories": Auction.CategoryChoices.labels
+            })
+        return HttpResponseRedirect(f"listing/{aukcja.id}")
+
+
+    else:
+        return render(reqest, "auctions/create.html",{
+        "categories": Auction.CategoryChoices.labels
+    })
+
+
+def listing_view(reqest,listing_id):
     aukcja =Auction.objects.get(id=listing_id)
+    try:
+        oferty=Bid.objects.get(auction=aukcja)
+    except Bid.DoesNotExist:
+        oferty=[]
+
     return render(reqest, "auctions/listing.html",{
         "auction": aukcja,
-        "historyBid":Bid.object.get(auction=aukcja)
+        "historyBid":oferty
     })
 
 
@@ -63,7 +109,7 @@ def logout_view(request):
     return HttpResponseRedirect(reverse("index"))
 
 
-def register(request):
+def register_view(request):
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
