@@ -20,12 +20,12 @@ class Auction(models.Model):
     author=models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctions")
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=512)
-    img = models.CharField(max_length=512, default='none')
+    img = models.CharField(max_length=512, default='none', blank=True)
     endDate = models.DateTimeField()
     price = models.FloatField()
     category = models.CharField(max_length=2, choices=CategoryChoices.choices)
     subscribers = models.ManyToManyField(User, blank=True, related_name="watchlist")
-    startDate = models.DateTimeField(auto_now=True)
+    startDate = models.DateTimeField(auto_now=True )
     
 
 class Comment(models.Model):

@@ -2,33 +2,9 @@
 
 {% block body%}
 <h2>create Listing</h2>
-    <form class="Create-form-wraper" action="{% url 'create' %}" method="post">
+    <form class="Create-form-wraper" action="" method="post">
         {% csrf_token %}
-        <label for="title" class="form-group create-form">
-            Title:<input class="form-control" autofocus name="title" id="title" type="text" required>
-        </label>
-        
-        <label for="description" class="form-group create-form">
-            Description:<textarea class="form-control" type="text" rows="6" name="description" id="description" required></textarea>
-        </label>
-        <label for="img" class="form-group create-form">
-            Img(optional):<input class="form-control" type="text" name="img" id="img" placeholder="provaide a url to photo">
-        </label>
-        <label for="endDate" data-provide="datepicker" class="form-group create-form">
-            End date of auction:<input class="form-control" type="datetime-local" name="endDate" id="endDate" required >
-        </label>
-        <label for="price" class="form-group create-form">
-            Starting price:<input class="form-control" type="number" name="price" id="price" required>
-        </label>
-        <label for="category" class="form-group create-form" >
-            <select class="form-control" name="category" id="category" required>
-                {% for category in categories %}
-                    <option value="{{ category }}">{{ category }}</option>
-                {% endfor %}
-            </select>
-        </label>
-        <div class="message">{{ message }}</div>
-        <input class="btn btn-primary" type="submit" value="create">
-
+        {{ form }}
+        <input class="btn btn-primary" type="submit" value="create"> 
     </form>
 {% endblock%}

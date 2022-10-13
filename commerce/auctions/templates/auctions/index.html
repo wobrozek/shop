@@ -5,7 +5,7 @@
 
     {% for auction in auctions %}
         <div class="auction">
-            <a href={% url "'listing'/{{ auction.id }}" %}>
+            <a href="listing/{{ auction.id }}">
                 <h3>{{ auction.title }}</h3>
             
                 {% if auction.img != 'none' %}

@@ -1,13 +1,17 @@
 from datetime import datetime
 from email import message
+from multiprocessing import context
 from turtle import title
 from unicodedata import category
+from urllib import request
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from .forms import AuctionForm, BidForm
+from django.forms import ValidationError
 
 from .models import User, Auction, Bid
 
@@ -31,56 +35,68 @@ def categories_view(request):
 
 
 @login_required
-def create_view(reqest):
-    if reqest.method=="POST":
-        title=reqest.POST["title"]
-        description=reqest.POST["description"]
-        img=reqest.POST["img"]
-
-        #check if date is in the future
-        endDate=datetime.strptime(reqest.POST["endDate"],"%Y-%m-%dT%H:%M")
-        if endDate < datetime.now():
-            return render(reqest, "auctions/create.html",{
-            "message":"The end of auction date must be in the future",
-            "categories": Auction.CategoryChoices.labels
-            })
-
-        price=int(reqest.POST["price"])
-        #check if price is positiv number
-        if price < 0:
-            return render(reqest, "auctions/create.html",{
-            "message":"The price must be greater than zero",
-            "categories": Auction.CategoryChoices.labels
-            })
-        category=reqest.POST["category"]
-
-        try:
-            aukcja = Auction.objects.create(author=reqest.user,title=title,description=description,img=img,endDate=endDate,price=price,category=category)
+def create_view(request):
+    if request.method=="POST":
+        form = AuctionForm(request.POST)
+        if form.is_valid():
+            aukcja = form.save(commit=False)
+            aukcja.author = request.user
             aukcja.save()
-        except IntegrityError:
-            render(reqest, "auctions/create.html",{
-                "message":"All required field must be",
-                "categories": Auction.CategoryChoices.labels
+            
+            return HttpResponseRedirect(f"/listing/{aukcja.id}")
+        else:
+            return render(request,"auctions/create.html",{
+                "form":form
             })
-        return HttpResponseRedirect(f"listing/{aukcja.id}")
-
 
     else:
-        return render(reqest, "auctions/create.html",{
-        "categories": Auction.CategoryChoices.labels
+        form = AuctionForm
+        return render(request, "auctions/create.html",{
+        "form":form
     })
 
 
-def listing_view(reqest,listing_id):
+def listing_view(request,listing_id):
     aukcja =Auction.objects.get(id=listing_id)
     try:
-        oferty=Bid.objects.get(auction=aukcja)
+        oferty=Bid.objects.filter(auction=aukcja)
     except Bid.DoesNotExist:
         oferty=[]
+    
+    owner=False
+    if aukcja.author == request.user:
+        owner=True
 
-    return render(reqest, "auctions/listing.html",{
+    if request.method=="POST":
+        form = BidForm(request.POST)
+        
+        if form.is_valid():
+            if form.cleaned_data.get('price')<aukcja.price:
+                return render(request, "auctions/listing.html",{
+                "auction": aukcja,
+                "historyBid":oferty,
+                "form":form,
+                "message":"The price must be greater than last ofert"  
+                })
+            bid =form.save(commit=False)
+            bid.auction=aukcja
+            bid.author=request.user
+            aukcja.price=bid.price
+            bid.save()
+            aukcja.save()
+            HttpResponseRedirect(f"/listing/{aukcja.id}")
+        else:
+            return render(request, "auctions/listing.html",{
+            "auction": aukcja,
+            "historyBid":oferty,
+            "form":form,
+            "owner":owner
+    })
+    return render(request, "auctions/listing.html",{
         "auction": aukcja,
-        "historyBid":oferty
+        "historyBid":oferty,
+        "form":BidForm,
+        "owner":owner
     })
 
 

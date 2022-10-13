@@ -12,11 +12,23 @@
     <div class="auction-description">{{ auction.description }}</div>
     <div class="auction-price">Price: {{ auction.price }}</div>
 
-    <form action="">
+    {% if user.is_authenticated %}
+
+    <form action="" method="post">       
         {% csrf_token %}
-        <input type="number" , value={{ auction.price }}>
-        <input type="submit", class="btn btn-primary" value="Place bid">
+        {% if owner %}
+            <input class="btn btn-danger" type="submit" value="End your Auction">
+            <div class="warning"> If you end your auction current best ofert will win <div>
+        {% else %}
+            {{ form }}
+            <span class="errorspan">
+            {{message}}
+            </span>
+            <input class="btn btn-primary" type="submit" value="Add Bid "> 
+        {% endif %}
     </form>
+    {% endif %}
+
 
 
     <div class="history">
@@ -30,8 +42,8 @@
         <ul>
             <li>Listed by: {{ auction.author}}</li>
             <li>category: {{auction.category}}</li>
-            <li>Auction was created: {{ auction.startDate }} </li>
-            <li>Auction expire date: {{ auction.endDate }}</li>
+            <li>Auction was created: {{ auction.startDate| date:"d-m-Y H:i" }} </li>
+            <li>Auction expire date: {{ auction.endDate| date:" d-m-Y H:i" }}</li>
         </ul>
 </div>
 
