@@ -55,49 +55,62 @@ def create_view(request):
         "form":form
     })
 
+def create_contex(listing_id,request):
+    form = BidForm(request.POST)
+    auction = Auction.objects.get(id=listing_id)
 
-def listing_view(request,listing_id):
-    aukcja =Auction.objects.get(id=listing_id)
-    try:
-        oferty=Bid.objects.filter(auction=aukcja)
-    except Bid.DoesNotExist:
-        oferty=[]
-    
-    owner=False
-    if aukcja.author == request.user:
+    #user is a author ?
+    if auction.author == request.user:
         owner=True
+    else:
+        owner=False
+
+    #auctions have bids ?
+    try:
+        oferts = Bid.objects.filter(auction=auction)
+    except Bid.DoesNotExist:
+        oferts = []
+
+    #user is subscriber of auction ?
+    if request.user in auction.subscribers.all():
+        follow=True
+    else:
+        follow=False
+
+    return {"auction":auction,"historyBid":oferts,"form":form,"message":"","owner":owner,"follow":follow}
+
+
+@login_required
+def add_watchlist_view(request,listing_id):
+    context=create_contex(listing_id,request)
 
     if request.method=="POST":
-        form = BidForm(request.POST)
-        
-        if form.is_valid():
-            if form.cleaned_data.get('price')<aukcja.price:
-                return render(request, "auctions/listing.html",{
-                "auction": aukcja,
-                "historyBid":oferty,
-                "form":form,
-                "message":"The price must be greater than last ofert"  
-                })
-            bid =form.save(commit=False)
-            bid.auction=aukcja
-            bid.author=request.user
-            aukcja.price=bid.price
-            bid.save()
-            aukcja.save()
-            HttpResponseRedirect(f"/listing/{aukcja.id}")
+        if context["follow"]:
+            context["auction"].subscribers.remove(request.user)
         else:
-            return render(request, "auctions/listing.html",{
-            "auction": aukcja,
-            "historyBid":oferty,
-            "form":form,
-            "owner":owner
-    })
-    return render(request, "auctions/listing.html",{
-        "auction": aukcja,
-        "historyBid":oferty,
-        "form":BidForm,
-        "owner":owner
-    })
+            context["auction"].subscribers.add(request.user)
+
+    return HttpResponseRedirect(f"/listing/{context['auction'].id}")
+
+def listing_view(request,listing_id):
+    context=create_contex(listing_id,request)
+
+    if request.method=="POST":
+
+        if context["form"].is_valid():
+            if context["form"].cleaned_data.get('price')<context.auction.price:
+                return render(request, "auctions/listing.html",{context})
+            bid =context["form"].save(commit=False)
+            bid.auction=context["auction"]
+            bid.author=request.user
+            context["auction"].price=bid.price
+            bid.save()
+            context["aukcja"].save()
+            HttpResponseRedirect(f"/listing/{context['auction'].id}")
+        else:
+            return render(request, "auctions/listing.html",context)
+
+    return render(request, "auctions/listing.html",context)
 
 
 def login_view(request):

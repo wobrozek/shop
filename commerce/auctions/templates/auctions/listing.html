@@ -4,6 +4,7 @@
 
 <div class="auction-listing">
     <h3>{{ auction.title }}</h3>
+
     {% if auction.img != 'none' %}
         <div class="auction-img">
             <img src="{{ auction.img }}" alt="">
@@ -18,13 +19,21 @@
         {% csrf_token %}
         {% if owner %}
             <input class="btn btn-danger" type="submit" value="End your Auction">
-            <div class="warning"> If you end your auction current best ofert will win <div>
+            <div class="warning"> If you end your auction current best ofert will win </div>
         {% else %}
             {{ form }}
             <span class="errorspan">
             {{message}}
             </span>
             <input class="btn btn-primary" type="submit" value="Add Bid "> 
+        {% endif %}
+    </form>
+    <form action="/listing/watchlist/{{ auction.id }}" method="post">
+        {% csrf_token %}
+        {% if follow %}
+        <input class="btn btn-danger" type="submit" value="Delete from watch List ⭐">
+        {% else %}
+        <input class="btn btn-secondary" type="submit" value="Add to watch List ⭐">
         {% endif %}
     </form>
     {% endif %}
@@ -34,8 +43,9 @@
     <div class="history">
         <ul>
         {% for bid in historyBid %}
-            <li> {{ bid.price }} by {{ bid.author }}
-        {% endfor %}           
+            <li> {{ bid.price }} by {{ bid.author }}</li>
+        {% endfor %}
+        </ul>
     </div>
 
     <h3> Details </h3>
