@@ -6,6 +6,7 @@ from unicodedata import category
 from urllib import request
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
+from django.db.models import Max
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -58,6 +59,16 @@ def create_contex(listing_id,request):
     form = BidForm(request.POST)
     auction = Auction.objects.get(id=listing_id)
 
+    #auction is still active ?
+    if auction.endDate < datetime.now(auction.endDate.tzinfo):
+        auction.close=True
+        auction.save()
+
+    #if closed add the winer
+    winnerBid=""
+    if auction.close == True:
+        winnerBid=auction.getWinner()
+
     #user is a author ?
     if auction.author == request.user:
         owner=True
@@ -76,7 +87,7 @@ def create_contex(listing_id,request):
     else:
         follow=False
 
-    return {"auction":auction,"historyBid":oferts,"form":form,"message":"","owner":owner,"follow":follow}
+    return {"auction":auction,"historyBid":oferts,"form":form,"message":"","owner":owner,"follow":follow,"close":auction.close,"winnerBid":winnerBid}
 
 
 @login_required
@@ -96,6 +107,13 @@ def listing_view(request,listing_id):
 
     if request.method=="POST":
 
+        #if user is the owner he can only close the auction
+        if context["owner"]==True:
+            context["auction"].close=True
+            context["auction"].save()
+            return render(request, "auctions/listing.html", context)
+
+        # if user is not owner and place a bid
         if context["form"].is_valid():
             if context["form"].cleaned_data.get('price')<=context["auction"].price:
                 context["message"]="the price must be greater than previous bid"
