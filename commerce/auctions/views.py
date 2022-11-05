@@ -15,7 +15,6 @@ from django.forms import ValidationError
 
 from .models import User, Auction, Bid
 
-
 def index(request):
     return render(request, "auctions/index.html",{
         "auctions": Auction.objects.all()
@@ -98,14 +97,15 @@ def listing_view(request,listing_id):
     if request.method=="POST":
 
         if context["form"].is_valid():
-            if context["form"].cleaned_data.get('price')<context.auction.price:
-                return render(request, "auctions/listing.html",{context})
+            if context["form"].cleaned_data.get('price')<=context["auction"].price:
+                context["message"]="the price must be greater than previous bid"
+                return render(request, "auctions/listing.html",context)
             bid =context["form"].save(commit=False)
             bid.auction=context["auction"]
             bid.author=request.user
             context["auction"].price=bid.price
             bid.save()
-            context["aukcja"].save()
+            context["auction"].save()
             HttpResponseRedirect(f"/listing/{context['auction'].id}")
         else:
             return render(request, "auctions/listing.html",context)
