@@ -81,6 +81,9 @@
     {% for comment in comments %}
       <li>{{ comment.text }} <span class="comments-author">{{comment.author}}</span></li>
     {% endfor %}
+        {% if not comments %}
+            <li class="comments-noComments">there is no comments </li>
+        {% endif %}
     </ul>
 </div>
 {% endblock%}
