@@ -11,10 +11,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .forms import AuctionForm, BidForm
+from .forms import AuctionForm, BidForm ,CommentForm
 from django.forms import ValidationError
 
-from .models import User, Auction, Bid
+from .models import User, Auction, Bid ,Comment
 
 def index(request):
     return render(request, "auctions/index.html",{
@@ -56,7 +56,8 @@ def create_view(request):
     })
 
 def create_contex(listing_id,request):
-    form = BidForm(request.POST)
+    formBid = BidForm(request.POST)
+    formComments =CommentForm(request.POST)
     auction = Auction.objects.get(id=listing_id)
 
     #auction is still active ?
@@ -80,6 +81,12 @@ def create_contex(listing_id,request):
         oferts = Bid.objects.filter(auction=auction)
     except Bid.DoesNotExist:
         oferts = []
+        
+    #auctions have a comments ?
+    try:
+        comments=auction.comment.all()
+    except:
+        comments=[]
 
     #user is subscriber of auction ?
     if request.user in auction.subscribers.all():
@@ -87,7 +94,25 @@ def create_contex(listing_id,request):
     else:
         follow=False
 
-    return {"auction":auction,"historyBid":oferts,"form":form,"message":"","owner":owner,"follow":follow,"close":auction.close,"winnerBid":winnerBid}
+    return {"auction":auction,"historyBid":oferts,
+            "formBid":formBid,"formComments":formComments,
+            "message":"","owner":owner,"follow":follow,
+            "close":auction.close,"winnerBid":winnerBid,
+            "comments":comments}
+
+@login_required
+def add_comment_view(request,listing_id):
+    context=create_contex(listing_id,request)
+
+    if request.method=="POST":
+        if context["formComments"].is_valid():
+            comment = context["formComments"].save(commit=False)
+            comment.auction = context["auction"]
+            comment.author = request.user
+            comment.save()
+            return HttpResponseRedirect(f"/listing/{context['auction'].id}")
+
+    return HttpResponseRedirect(f"/listing/{context['auction'].id}")
 
 
 @login_required
@@ -114,11 +139,14 @@ def listing_view(request,listing_id):
             return render(request, "auctions/listing.html", context)
 
         # if user is not owner and place a bid
-        if context["form"].is_valid():
-            if context["form"].cleaned_data.get('price')<=context["auction"].price:
+        if context["formBid"].is_valid():
+
+            #if wrong price
+            if context["formBid"].cleaned_data.get('price')<=context["auction"].price:
                 context["message"]="the price must be greater than previous bid"
                 return render(request, "auctions/listing.html",context)
-            bid =context["form"].save(commit=False)
+
+            bid =context["formBid"].save(commit=False)
             bid.auction=context["auction"]
             bid.author=request.user
             context["auction"].price=bid.price

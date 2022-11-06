@@ -21,13 +21,16 @@
             <input class="btn btn-danger" type="submit" value="End your Auction">
             <div class="warning"> If you end your auction current best ofert will win </div>
         {% else %}
-            {{ form }}
+            {{ formBid }}
             <span class="errorspan">
             {{message}}
             </span>
             <input class="btn btn-primary" type="submit" value="Add Bid "> 
         {% endif %}
     </form>
+    {% endif %}
+
+    {% if user.is_authenticated %}
     <form action="/listing/watchlist/{{ auction.id }}" method="post">
         {% csrf_token %}
         {% if follow %}
@@ -42,7 +45,7 @@
         {% if winnerBid != None %}
             <div class="winner">🏆Auction is closed and the winner is: {{winnerBid.author }}🏆 </div>
         {% else %}
-            <div class="winner">❌Auction is closed and nobody wins the auction❌ </div>
+            <div class="winner notWinner" >❌Auction is closed and nobody wins the auction❌ </div>
         {% endif %}
     {% endif %}
 
@@ -65,4 +68,19 @@
         </ul>
 </div>
 
+<div class="comments">
+        <h3>Comments</h3>
+{% if user.is_authenticated %}
+    <form action="/listing/comments/{{ auction.id }}" method="post">
+        {% csrf_token %}
+        {{formComments}}
+        <input type="submit" class="btn btn-primary">
+    </form>
+{% endif %}
+    <ul class="comments-list" >
+    {% for comment in comments %}
+      <li>{{ comment.text }} <span class="comments-author">{{comment.author}}</span></li>
+    {% endfor %}
+    </ul>
+</div>
 {% endblock%}
