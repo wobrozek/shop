@@ -6,50 +6,67 @@
         <title>{% block title %}Auctions{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+
     </head>
     <body>
-        <h1>Auctions</h1>
-        <div>
-            {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>.
-            {% else %}
-                Not signed in.
-            {% endif %}
-        </div>
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'categories' %}">Categories</a>
-            </li>
-
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
-                    <span class="watch-list-number">{{follow_number}}</span>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-success sticky-top">
+            <div class="collapse navbar-collapse" id="collapsibleNavId">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item b4-navba">
+                    <a class="nav-link" href="{% url 'index' %}">Auctions</a>
                 </li>
+                </ul>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
-                </li>
+                <div class=" dropdown"  >
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                </li>
+                    {% if user.is_authenticated %}
+                        <button class="image-circleWraper" data-bs-toggle="dropdown">
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsA8Uk6Moi9UCJYLnmIG0e6fJN0kfPZ7ISdA&usqp=CAU=" alt="profile image">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li >
+                                <a class="dropdown-item" href="{% url 'watchlist' %}">Watchlist</a>
+                                <span class="watch-list-number">{{follow_number}}</span>
+                            </li>
+                            <li >
+                                <a class="dropdown-item" href="{% url 'create' %}">Create Listing</a>
+                            </li>
 
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
-            {% endif %}
-        </ul>
-        <hr>
+                            <li >
+                                <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                            </li>
+                         </ul>
+
+                {% else %}
+                    <button class="image-circleWraper" data-bs-toggle="dropdown" >
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsA8Uk6Moi9UCJYLnmIG0e6fJN0kfPZ7ISdA&usqp=CAU=" alt="profile image">
+                    </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'login' %}">Log In</a>
+                            </li>
+                            <li >
+                                <a class="dropdown-item" href="{% url 'register' %}">Register</a>
+                            </li>
+                        </ul>
+                {% endif %}
+                </div>
+                </div>
+                                {% if user.is_authenticated %}
+                        <div class="text-light">
+                            Signed in as <strong>{{ user.username }}</strong>.
+                        </div>
+                    {% else %}
+                        <div class="text-light">
+                            Not signed in
+                        </div>
+                    {% endif %}
+        </nav>
+
+
         {% block body %}
         {% endblock %}
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     </body>
 </html>

@@ -5,8 +5,14 @@
 
     {% for auction in auctions %}
         <div class="auction">
-            <a href="/listing/{{ auction.id }}">
-                <h3>{{ auction.title }}</h3>
+            <div class="flex">
+                <div>
+                    <h3>{{ auction.title }}</h3>
+                </div>
+                <div>
+                    {{ auction.daysLeft}}
+                </div>
+            </div>
             
                 {% if auction.img != 'none' %}
                     <div class="auction-img">
@@ -14,9 +20,11 @@
                     </div>
                 {% endif %}
             
-                <div class="auction-description">{{ auction.description }}</div>
+            <div class="auction-description">{{ auction.description }}</div>
+            <div class="flex">
                 <div class="auction-price">Price: {{ auction.price }}</div>
-            </a>
+                <a class="btn btn-success" href="/listing/{{ auction.id }}">Bid</a>
+            </div>
         </div>
     {% endfor %}
 {% endblock %}

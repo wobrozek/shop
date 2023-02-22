@@ -1,7 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy
-from datetime import datetime
+from datetime import datetime ,timezone
+
 
 class User(AbstractUser, models.Model):
     pass
@@ -35,6 +36,10 @@ class Auction(models.Model):
             return winnerBid
         except:
             return None
+
+    def daysLeft(self):
+        toEnd = self.endDate-datetime.now(timezone.utc)
+        return toEnd.days
     
 
 class Comment(models.Model):
