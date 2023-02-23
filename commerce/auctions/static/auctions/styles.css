@@ -3,6 +3,10 @@ body {
     margin: 0;
 }
 
+body *{
+    box-sizing:border-box;
+}
+
 button:focus {
     outline: none;
 }
@@ -23,3 +27,51 @@ button{
     justify-content: center;
     margin-right:10px;
 }
+
+.flex-between{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+
+.flex-column{
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.auction-description{
+    width:100%;
+}
+
+.width-50 {
+    width: 50%;
+}
+
+.flex-alignSelf-end{
+    align-self: flex-end;
+}
+
+
+.auction{
+    width:80%;
+    border: 1px solid #28A745;
+    display:flex;
+    flex-wrap:wrap;
+    padding:30px;
+    margin:30px auto;
+    background-color:#ECF0F1;
+}
+
+main{
+    margin:auto;
+    max-width:1200px;
+}
+
+.auction img{
+    width:50%;
+    display:block;
+    margin:auto;
+}
+
+

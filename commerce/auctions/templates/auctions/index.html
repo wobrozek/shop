@@ -2,29 +2,9 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
+    <main>
     {% for auction in auctions %}
-        <div class="auction">
-            <div class="flex">
-                <div>
-                    <h3>{{ auction.title }}</h3>
-                </div>
-                <div>
-                    {{ auction.daysLeft}}
-                </div>
-            </div>
-            
-                {% if auction.img != 'none' %}
-                    <div class="auction-img">
-                        <img src="{{ auction.img }}" alt="">
-                    </div>
-                {% endif %}
-            
-            <div class="auction-description">{{ auction.description }}</div>
-            <div class="flex">
-                <div class="auction-price">Price: {{ auction.price }}</div>
-                <a class="btn btn-success" href="/listing/{{ auction.id }}">Bid</a>
-            </div>
-        </div>
+        {% include 'auctions/components/listingItem.html' %}
     {% endfor %}
+    </main>
 {% endblock %}
