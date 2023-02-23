@@ -6,7 +6,7 @@
 
     {% include 'auctions/components/listingItem.html' %}
 
-    
+
     {% if close %}
         {% if winnerBid != None %}
             <div class="winner">🏆Auction is closed and the winner is: {{winnerBid.author }}🏆 </div>
@@ -16,14 +16,30 @@
     {% endif %}
 
 
-
-    <div class="history">
+    <h3>History</h3>
+    <div class="recycleView">
         <ul>
-        {% for bid in historyBid %}
-            <li> {{ bid.price }} by {{ bid.author }}</li>
-        {% endfor %}
+        {% if not historyBid %}
+            <div class="py-2">Nobody bids this auction yet💤</div>
+        {% else %}
+        {% for bid in historyBid %}            
+                <li class="d-flex justify-content-between align-content-center recycleView-bid">
+                    <div class="d-flex">
+                        <button class="image-circleWraper" >
+                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsA8Uk6Moi9UCJYLnmIG0e6fJN0kfPZ7ISdA&usqp=CAU=" alt="profile image">
+                        </button>
+                        {{ bid.author }}
+                    </div>
+                    <div>
+                        {{ bid.price }} PLN 
+                    </div>
+                </li>
+            {% endfor %}
+        {% endif %}
         </ul>
     </div>
+
+
 
     <h3> Details </h3>
         <ul>
@@ -34,8 +50,9 @@
         </ul>
 </div>
 
-<div class="comments">
-        <h3>Comments</h3>
+
+<h3>Comments</h3>
+
 {% if user.is_authenticated %}
     <form action="/listing/comments/{{ auction.id }}" method="post">
         {% csrf_token %}
@@ -43,13 +60,26 @@
         <input type="submit" class="btn btn-primary">
     </form>
 {% endif %}
-    <ul class="comments-list" >
-    {% for comment in comments %}
-      <li>{{ comment.text }} <span class="comments-author">{{comment.author}}</span></li>
-    {% endfor %}
-        {% if not comments %}
-            <li class="comments-noComments">there is no comments </li>
-        {% endif %}
+
+<div class="recycleView">
+    <ul>
+    {% if not comments %}
+        <div class="py-2">Nobody comment this auction yet💤</div>
+    {% else %}
+    {% for comment in comments %}            
+            <li class="d-flex justify-content-between align-content-center recycleView-bid">
+                <div class="d-flex">
+                    <button class="image-circleWraper" >
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsA8Uk6Moi9UCJYLnmIG0e6fJN0kfPZ7ISdA&usqp=CAU=" alt="profile image">
+                    </button>
+                    <div class="d-flex flex-column">
+                        <div>{{ comment.author }}</div>
+                        <div>{{ comment.text }}</div>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    {% endif %}
     </ul>
 </div>
 </main>

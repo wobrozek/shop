@@ -7,6 +7,10 @@ body * {
     box-sizing: border-box;
 }
 
+ul {
+    margin: 0;
+}
+
 i {
     font-size: 30px;
 }
@@ -40,16 +44,15 @@ button {
     margin-right: 10px;
 }
 
-.flex-between {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+.recycleView {
+    max-height: 300px;
+    overflow-y: scroll;
+    gap: 3px;
+    background-color: #ECF0F1;
 }
 
-.flex-column {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.recycleView-bid {
+    margin: 30px 0;
 }
 
 .auction-description {
