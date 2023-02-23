@@ -52,10 +52,10 @@
 <h3>Comments</h3>
 
 {% if user.is_authenticated %}
-    <form class="d-flex" action="/listing/comments/{{ auction.id }}" method="post">
+    <form class="d-flex gap-3 align-items-center" action="/listing/comments/{{ auction.id }}" method="post">
         {% csrf_token %}
         {{formComments}}
-        <input type="submit" class="btn btn-primary">
+        <input type="submit" class="btn btn-success">
     </form>
 {% endif %}
 
