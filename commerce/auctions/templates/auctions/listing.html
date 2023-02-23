@@ -1,46 +1,12 @@
 {% extends "auctions/layout.html" %}
 
 {% block body%}
-
+<main>
 <div class="auction-listing">
-    <h3>{{ auction.title }}</h3>
 
-    {% if auction.img != 'none' %}
-        <div class="auction-img">
-            <img src="{{ auction.img }}" alt="">
-        </div>
-    {% endif %}
-    <div class="auction-description">{{ auction.description }}</div>
-    <div class="auction-price">Price: {{ auction.price }}</div>
+    {% include 'auctions/components/listingItem.html' %}
 
-    {% if user.is_authenticated and not close %}
-
-    <form action="" method="post">       
-        {% csrf_token %}
-        {% if owner %}
-            <input class="btn btn-danger" type="submit" value="End your Auction">
-            <div class="warning"> If you end your auction current best ofert will win </div>
-        {% else %}
-            {{ formBid }}
-            <span class="errorspan">
-            {{message}}
-            </span>
-            <input class="btn btn-primary" type="submit" value="Add Bid "> 
-        {% endif %}
-    </form>
-    {% endif %}
-
-    {% if user.is_authenticated %}
-    <form action="/listing/watchlist/{{ auction.id }}" method="post">
-        {% csrf_token %}
-        {% if follow %}
-        <input class="btn btn-danger" type="submit" value="Delete from watch List ⭐">
-        {% else %}
-        <input class="btn btn-secondary" type="submit" value="Add to watch List ⭐">
-        {% endif %}
-    </form>
-    {% endif %}
-
+    
     {% if close %}
         {% if winnerBid != None %}
             <div class="winner">🏆Auction is closed and the winner is: {{winnerBid.author }}🏆 </div>
@@ -86,4 +52,5 @@
         {% endif %}
     </ul>
 </div>
+</main>
 {% endblock%}

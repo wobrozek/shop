@@ -3,21 +3,33 @@ body {
     margin: 0;
 }
 
-body *{
-    box-sizing:border-box;
+body * {
+    box-sizing: border-box;
+}
+
+i {
+    font-size: 30px;
 }
 
 button:focus {
     outline: none;
 }
 
-button{
+button {
     border: none;
 }
-.image-circleWraper img{
-    width:45px;
+
+.absolute-right-up {
+    position: absolute;
+    right: 5px;
+    top: 5px;
 }
-.image-circleWraper{
+
+.image-circleWraper img {
+    width: 45px;
+}
+
+.image-circleWraper {
     border-radius: 50%;
     width: 45px;
     height: 45px;
@@ -25,53 +37,65 @@ button{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right:10px;
+    margin-right: 10px;
 }
 
-.flex-between{
-    display:flex;
-    justify-content:space-between;
-    flex-wrap:wrap;
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
-.flex-column{
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.auction-description{
-    width:100%;
+.auction-description {
+    width: 100%;
 }
 
 .width-50 {
     width: 50%;
 }
 
-.flex-alignSelf-end{
+.flex-alignSelf-end {
     align-self: flex-end;
 }
 
 
-.auction{
-    width:80%;
+.auction {
+    position: relative;
     border: 1px solid #28A745;
-    display:flex;
-    flex-wrap:wrap;
-    padding:30px;
-    margin:30px auto;
-    background-color:#ECF0F1;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 30px;
+    margin: 30px auto;
+    background-color: #ECF0F1;
 }
 
-main{
-    margin:auto;
-    max-width:1200px;
+.gap-3 {
+    gap: 3px;
 }
 
-.auction img{
-    width:50%;
-    display:block;
-    margin:auto;
+.errorlist {
+    display: none;
 }
 
+.errorspan {
+    position: absolute;
+    bottom: 6px;
+    color: #dc3545;
+}
 
+main {
+    margin: auto;
+    max-width: 1200px;
+}
+
+.auction img {
+    width: 50%;
+    display: block;
+    margin: auto;
+}

@@ -1,6 +1,6 @@
 <div class="auction shadow ">
-            <div class="width-50 flex-column">
-                <div class="flex-between">
+            <div class="width-50 d-flex flex-column">
+                <div class="d-flex justify-content-between flex-wrap">
                     <div>
                         <h3>{{ auction.title }}</h3>
                     </div>
@@ -11,9 +11,33 @@
                     <div class="auction-description">{{ auction.description }}</div>
                 </div>
 
+                        {% comment %} buttons {% endcomment %}
 
+            {% if formBid %}
+                {% if user.is_authenticated and not close %}
 
-                <div class="flex-between ">
+                <form  class="d-flex justify-content-between align-items-center" action="" method="post">       
+                    {% csrf_token %}
+                    <div class="auction-price">
+                        Price: {{ auction.price }}
+                    </div>
+                    {% if owner %}
+                        <input class="btn btn-danger" type="submit" value="End your Auction" data-bs-toggle="tooltip" data-bs-placement="top"
+                        title="If you end your auction current best ofert will win" >
+
+                    {% else %}
+                    <div class="d-flex align-items-center gap-3 ">
+                        {{ formBid }}
+                        <span class="errorspan">
+                        {{message}}
+                        </span>
+                        <input class="btn btn-primary" type="submit" value="Add Bid "> 
+                    </div>
+                    {% endif %}
+                </form>
+                {% endif %}
+            {% else %}
+                <div class="d-flex justify-content-between ">
                     <div class="auction-price">
                         Price: {{ auction.price }}
                     </div>
@@ -21,6 +45,7 @@
                     Bid
                     </a>
                 </div>
+            {% endif %}
 
             </div>
 
@@ -29,5 +54,20 @@
                         <img src="{{ auction.img }}" alt="">
                     </div>
                 {% endif %}
+
+                {% comment %} follow button {% endcomment %}
+
+    {% if user.is_authenticated %}
+        <div class="absolute-right-up">        
+            <form action="/listing/watchlist/{{ auction.id }}" method="post">
+                {% csrf_token %}
+                {% if follow %}
+                <button class="btn" type="submit" ><i class="bi bi-star-fill"></i></button>
+                {% else %}
+                <button class="btn" type="submit" ><i class="bi bi-star"></i></button>
+                {% endif %}
+            </form>
+        </div>
+    {% endif %}
 
 </div>
