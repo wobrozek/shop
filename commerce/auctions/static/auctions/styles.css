@@ -15,8 +15,16 @@ i {
     font-size: 30px;
 }
 
+input .form-control {
+    width: unset;
+}
+
 button:focus {
     outline: none;
+}
+
+section {
+    margin: 20px 0;
 }
 
 button {
