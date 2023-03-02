@@ -21,7 +21,7 @@ class Auction(models.Model):
     author=models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctions")
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=512)
-    img = models.CharField(max_length=512, default='none', blank=True)
+    img = models.ImageField(upload_to='auctionImg/')
     endDate = models.DateTimeField()
     price = models.FloatField()
     category = models.CharField(max_length=2, choices=CategoryChoices.choices)
@@ -40,7 +40,6 @@ class Auction(models.Model):
     def daysLeft(self):
         toEnd = self.endDate-datetime.now(timezone.utc)
         return toEnd.days
-    
 
 class Comment(models.Model):
     text = models.CharField(max_length=2048)

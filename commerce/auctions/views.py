@@ -37,7 +37,7 @@ def categories_view(request):
 @login_required
 def create_view(request):
     if request.method=="POST":
-        form = AuctionForm(request.POST)
+        form = AuctionForm(request.POST,request.FILES)
         if form.is_valid():
             aukcja = form.save(commit=False)
             aukcja.author = request.user
@@ -209,3 +209,8 @@ def register_view(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+def auction_img(request,auction_id):
+    auction = Auction.objects.get(pk=auction_id)
+    if auction is not None:
+        return render(request,"auction/index.html", {'img':auction.img})

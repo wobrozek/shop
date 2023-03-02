@@ -8,16 +8,12 @@ class AuctionForm(ModelForm):
         model = Auction
         fields = ('title', 'description', 'img', 'price', 'category', 'endDate')
         labels = {
-            'img':'Img (optional)',
             'endDate':'End date of auction'
-        }
-        initial ={
-            'img':""
         }
         widgets = {
             'title':forms.TextInput(attrs={'class':'form-control'}),
             'description':forms.Textarea(attrs={'class':'form-control'}),
-            'img':forms.TextInput(attrs={'class':'form-control','value':'','placeholder':"prowide url to image" }),
+            'img':forms.FileInput(attrs={'class':'form-control'}),
             'price':forms.NumberInput(attrs={'class':'form-control'}),
             'category':forms.Select(attrs={'class':'form-control'}),
             'endDate':forms.DateTimeInput(attrs={'class':'form-control','type':'datetime-local'})

@@ -1,19 +1,19 @@
 {% extends "auctions/layout.html" %}
 
 {% block body%}
+
+{% if close %}
+{% if winnerBid != None %}
+    <div class="winner">🏆Auction is closed and the winner is: {{winnerBid.author }}🏆</div>
+{% else %}
+    <div class="winner" >❌Auction is closed and nobody wins the auction❌</div>
+{% endif %}
+{% endif %}
+
 <main>
 <div class="auction-listing">
 
     {% include 'auctions/components/listingItem.html' %}
-
-
-    {% if close %}
-        {% if winnerBid != None %}
-            <div class="winner">🏆Auction is closed and the winner is: {{winnerBid.author }}🏆 </div>
-        {% else %}
-            <div class="winner notWinner" >❌Auction is closed and nobody wins the auction❌ </div>
-        {% endif %}
-    {% endif %}
 
     <h3> Details </h3>
     <section >
@@ -23,6 +23,7 @@
             <li class="list-group-item">Auction was created: {{ auction.startDate| date:"d-m-Y H:i" }} </li>
             <li class="list-group-item">Auction expire date: {{ auction.endDate| date:" d-m-Y H:i" }}</li>
         </ul>
+
     </section>
 
     <h3>History</h3>

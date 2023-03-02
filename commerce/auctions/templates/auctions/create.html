@@ -2,9 +2,11 @@
 
 {% block body%}
 <h2>create Listing</h2>
-    <form class="Create-form-wraper" action="" method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input class="btn btn-primary" type="submit" value="create"> 
-    </form>
+    <main>
+        <form class="Create-form-wraper" action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <input class="btn btn-primary" type="submit" value="create"> 
+        </form>
+    </main>
 {% endblock%}

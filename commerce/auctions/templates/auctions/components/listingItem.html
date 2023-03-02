@@ -49,9 +49,9 @@
 
             </div>
 
-                {% if auction.img != 'none' %}
+                {% if auction.img %}
                     <div class="auction-img width-50">
-                        <img src="{{ auction.img }}" alt="">
+                        <img src="{{ auction.img.url }}" alt="">
                     </div>
                 {% endif %}
 

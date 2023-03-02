@@ -26,8 +26,11 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li >
-                                <a class="dropdown-item" href="{% url 'watchlist' %}">Watchlist</a>
-                                <span class="watch-list-number">{{follow_number}}</span>
+                                <a class="dropdown-item" href="{% url 'watchlist' %}">
+                                    Watchlist
+                                    <span class="watch-list-number">{{follow_number}}</span>
+                                </a>
+                                
                             </li>
                             <li >
                                 <a class="dropdown-item" href="{% url 'create' %}">Create Listing</a>
