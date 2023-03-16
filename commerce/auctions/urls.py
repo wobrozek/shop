@@ -12,6 +12,7 @@ urlpatterns = [
     path("watchlist/", views.watchlist_view, name="watchlist"), 
     path("categories/", views.categories_view, name="categories"),
     path("create/", views.create_view, name="create"),
+    path("editProfile/",views.edit_profile_view,name="editProfile"),
 
     #listing path and forms
     path("listing/<int:listing_id>", views.listing_view, name="listing"),

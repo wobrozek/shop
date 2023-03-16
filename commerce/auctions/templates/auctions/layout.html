@@ -22,7 +22,7 @@
 
                     {% if user.is_authenticated %}
                         <button class="image-circleWraper" data-bs-toggle="dropdown">
-                            <img src={{user.img}} alt="profile image">
+                            <img src={{user.img.url }} alt="profile image">
                         </button>
                         <ul class="dropdown-menu">
                             <li >
@@ -34,6 +34,10 @@
                             </li>
                             <li >
                                 <a class="dropdown-item" href="{% url 'create' %}">Create Listing</a>
+                            </li>
+
+                            <li >
+                                <a class="dropdown-item" href="{% url 'editProfile' %}">Edit profile</a>
                             </li>
 
                             <li >

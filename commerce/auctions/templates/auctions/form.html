@@ -1,12 +1,12 @@
 {% extends "auctions/layout.html" %}
 
 {% block body%}
-<h2>create Listing</h2>
+<h2>{{ formTitle }}</h2>
     <main>
         <form class="Create-form-wraper" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form }}
-            <input class="btn btn-primary" type="submit" value="create"> 
+            <input class="btn btn-success" type="submit" value={{ formValue }}>
         </form>
     </main>
 {% endblock%}

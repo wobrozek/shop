@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm, NumberInput, ValidationError
-from .models import Bid, Auction, Comment
+from .models import Bid, Auction, Comment, User
 from datetime import datetime
 
 class AuctionForm(ModelForm):
@@ -62,3 +62,19 @@ class CommentForm(ModelForm):
         widgets={
             'text':forms.TextInput(attrs={'class':'form-control'})
         }
+
+class EditProfileForm(ModelForm):
+    class Meta():
+        model= User
+        fields=('username','email','img')
+
+        widgets={
+            "username":forms.TextInput(attrs={'class':'form-control'}),
+            "email": forms.EmailInput(attrs={'class': 'form-control'}),
+            "img": forms.FileInput(attrs={'class': 'form-control'})
+        }
+
+
+
+
+

@@ -9,19 +9,17 @@ class User(AbstractUser, models.Model):
     pass
     img = models.ImageField(upload_to='profileImg/',blank=True )
 
-    @classmethod
-    def create_user(cls,username,email,password):
-        user = cls(username=username,email=email,password=password)
-        user.createDefaultImg()
-        return user
+    def save(self, *args, **kwargs):
+        self.createDefaultImg()
+        super().save(*args, **kwargs)
 
     def createDefaultImg(self):
         img = Image.new('RGB',(100,100),color=(189, 195, 199))
         ctx= ImageDraw.Draw(img)
         font = ImageFont.truetype(font="arial.ttf",size=50)
-        ctx.text((30,25),self.username[0],fill=(44, 62, 80),font=font)
+        ctx.text((30,25),self.username[0].upper(),fill=(44, 62, 80),font=font)
         img.save(f'media/profileImg/{self.id}.jpg')
-        self.img=f'media/profileImg/{self.id}.jpg'
+        self.img=f'/profileImg/{self.id}.jpg'
 
 class Auction(models.Model):
 
@@ -31,8 +29,6 @@ class Auction(models.Model):
         ELECTRONICS = "EL", gettext_lazy("ELECTRONICS")
         HOME = "HO", gettext_lazy("HOME")
         CARS = "CR", gettext_lazy("CARS")
-    
-
 
     author=models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctions")
     title = models.CharField(max_length=64)
@@ -61,7 +57,6 @@ class Comment(models.Model):
     text = models.CharField(max_length=2048)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comment")
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name="comment")
-
 
 class Bid(models.Model):
     price = models.FloatField()

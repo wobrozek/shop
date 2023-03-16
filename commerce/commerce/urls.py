@@ -10,9 +10,5 @@ urlpatterns = [
     path("", include("auctions.urls")),
 ]
 
-# #    debug tolbar
-# if settings.DEBUG:
-#     import debug_toolbar
-#     urlpatterns+=[),]
 
 

@@ -5,7 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from .forms import AuctionForm, BidForm ,CommentForm
+from .forms import AuctionForm, BidForm ,CommentForm ,EditProfileForm
+from django.contrib import messages
 from PIL import ImageDraw,Image
 
 from .models import User, Auction, Bid ,Comment
@@ -39,14 +40,18 @@ def create_view(request):
             
             return HttpResponseRedirect(f"/listing/{aukcja.id}")
         else:
-            return render(request,"auctions/create.html",{
-                "form":form
+            return render(request,"auctions/form.html",{
+                "form":form,
+                "formValue":"Create",
+                "formTitle":"Create Listing",
             })
 
     else:
         form = AuctionForm
-        return render(request, "auctions/create.html",{
-        "form":form
+        return render(request, "auctions/form.html",{
+        "form":form,
+        "formValue": "Create",
+        "formTitle": "Create Listing",
     })
 
 def create_contex(listing_id,request):
@@ -203,6 +208,24 @@ def register_view(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+@login_required
+def edit_profile_view(request):
+    if request.method=="POST":
+        form=EditProfileForm(request.POST,request.FILES,instance=request.user)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile is updated successfully')
+            return HttpResponseRedirect(reverse('index'))
+
+    form=EditProfileForm(instance=request.user)
+    return render(request,"auctions/form.html",{
+        "form":form,
+        "formTitle":"Edit Profile",
+        "formValue":"Edit"
+    })
+
 
 def auction_img(request,auction_id):
     auction = Auction.objects.get(pk=auction_id)

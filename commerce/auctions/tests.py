@@ -13,6 +13,8 @@ class form(TestCase):
 
         us1.createDefaultImg()
 
-        self.assertEqual(us1.img, "media/profileImg/1.jpg")
+        self.assertEqual(us1.img, "/profileImg/1.jpg")
+
+
 
 
