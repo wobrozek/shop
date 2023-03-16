@@ -60,7 +60,7 @@ def create_contex(listing_id,request):
     auction = Auction.objects.get(id=listing_id)
 
     #auction is still active ?
-    if auction.endDate < datetime.now(auction.endDate.tzinfo):
+    if auction.close == False and auction.endDate < datetime.now(auction.endDate.tzinfo):
         auction.close=True
         auction.save()
 
@@ -77,13 +77,13 @@ def create_contex(listing_id,request):
 
     #auctions have bids ?
     try:
-        oferts = Bid.objects.filter(auction=auction)
+        oferts = Bid.objects.select_related().filter(auction=auction)
     except Bid.DoesNotExist:
         oferts = []
         
     #auctions have a comments ?
     try:
-        comments=auction.comment.all()
+        comments=auction.comment.select_related()
     except:
         comments=[]
 

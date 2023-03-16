@@ -11,8 +11,6 @@ class form(TestCase):
         us2 = User.objects.create_user("Szymon", "mail@gmail.com", "123456")
         us3 = User.objects.create_user("Dorota", "mail@gmail.com", "123456")
 
-        us1.createDefaultImg()
-
         self.assertEqual(us1.img, "/profileImg/1.jpg")
 
 

@@ -36,7 +36,7 @@
                 <li class="d-flex justify-content-between align-content-center recycleView-bid">
                     <div class="d-flex">
                         <button class="image-circleWraper" >
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsA8Uk6Moi9UCJYLnmIG0e6fJN0kfPZ7ISdA&usqp=CAU=" alt="profile image">
+                            <img src={{bid.author.img}} alt="profile image">
                         </button>
                         {{ bid.author }}
                     </div>
@@ -69,7 +69,7 @@
             <li class="d-flex justify-content-between align-content-center recycleView-bid">
                 <div class="d-flex">
                     <button class="image-circleWraper" >
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsA8Uk6Moi9UCJYLnmIG0e6fJN0kfPZ7ISdA&usqp=CAU=" alt="profile image">
+                        <img src={{ comment.author.img }} alt="profile image">
                     </button>
                     <div class="d-flex flex-column">
                         <div>{{ comment.author }}</div>

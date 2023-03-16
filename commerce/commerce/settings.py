@@ -153,12 +153,12 @@ MEDIA_ROOT= os.path.join(BASE_DIR,'media/')
 
 INTERNAL_IPS = ['127.0.0.1',]
 
-# import mimetypes
-# mimetypes.add_type("application/javascript", ".js", True)
-#
-# def show_toolbar(request):
-#     return True
-# DEBUG_TOOLBAR_CONFIG = {
-#     "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
-#     'INTERCEPT_REDIRECTS': False,
-# }
+import mimetypes
+mimetypes.add_type("application/javascript", ".js", True)
+
+def show_toolbar(request):
+    return True
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
+    'INTERCEPT_REDIRECTS': False,
+}
