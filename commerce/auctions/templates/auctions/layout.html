@@ -18,11 +18,11 @@
                 </li>
                 </ul>
 
-                <div class=" dropdown"  >
+                <div class="dropdown">
 
                     {% if user.is_authenticated %}
                         <button class="image-circleWraper" data-bs-toggle="dropdown">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsA8Uk6Moi9UCJYLnmIG0e6fJN0kfPZ7ISdA&usqp=CAU=" alt="profile image">
+                            <img src={{user.img}} alt="profile image">
                         </button>
                         <ul class="dropdown-menu">
                             <li >

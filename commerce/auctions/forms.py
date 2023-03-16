@@ -14,11 +14,9 @@ class AuctionForm(ModelForm):
             'title':forms.TextInput(attrs={'class':'form-control'}),
             'description':forms.Textarea(attrs={'class':'form-control'}),
             'img':forms.FileInput(attrs={'class':'form-control'}),
-            'price':forms.NumberInput(attrs={'class':'form-control'}),
             'category':forms.Select(attrs={'class':'form-control'}),
             'endDate':forms.DateTimeInput(attrs={'class':'form-control','type':'datetime-local'})
         }
-
     def clean_price(self):
         price = self.cleaned_data.get("price")
 
@@ -32,7 +30,7 @@ class AuctionForm(ModelForm):
 
         if endDate < datetime.now(endDate.tzinfo):
             raise ValidationError("The end of auction date must be in the future")
-        
+       
         return endDate
 
 
@@ -58,7 +56,7 @@ class CommentForm(ModelForm):
         fields=('text',)
 
         labels={
-            'text':"Add comment"
+        'text':"Add comment"
         }
 
         widgets={

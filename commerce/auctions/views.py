@@ -1,18 +1,12 @@
 from datetime import datetime
-from email import message
-from multiprocessing import context
-from turtle import title
-from unicodedata import category
-from urllib import request
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.db.models import Max
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from .forms import AuctionForm, BidForm ,CommentForm
-from django.forms import ValidationError
+from PIL import ImageDraw,Image
 
 from .models import User, Auction, Bid ,Comment
 

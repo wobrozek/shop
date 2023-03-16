@@ -3,7 +3,7 @@
 {% block body%}
 
 {% if close %}
-{% if winnerBid != None %}
+{% if winnerBid %}
     <div class="winner">🏆Auction is closed and the winner is: {{winnerBid.author }}🏆</div>
 {% else %}
     <div class="winner" >❌Auction is closed and nobody wins the auction❌</div>
@@ -79,7 +79,7 @@
             </li>
         {% endfor %}
     {% endif %}
-    </ul>
+   </ul>
     
 </section>
 </div>

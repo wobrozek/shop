@@ -2,10 +2,26 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy
 from datetime import datetime ,timezone
+from PIL import Image,ImageDraw,ImageFont
 
 
 class User(AbstractUser, models.Model):
     pass
+    img = models.ImageField(upload_to='profileImg/',blank=True )
+
+    @classmethod
+    def create_user(cls,username,email,password):
+        user = cls(username=username,email=email,password=password)
+        user.createDefaultImg()
+        return user
+
+    def createDefaultImg(self):
+        img = Image.new('RGB',(100,100),color=(189, 195, 199))
+        ctx= ImageDraw.Draw(img)
+        font = ImageFont.truetype(font="arial.ttf",size=50)
+        ctx.text((30,25),self.username[0],fill=(44, 62, 80),font=font)
+        img.save(f'media/profileImg/{self.id}.jpg')
+        self.img=f'media/profileImg/{self.id}.jpg'
 
 class Auction(models.Model):
 
