@@ -10,7 +10,9 @@ class User(AbstractUser, models.Model):
     img = models.ImageField(upload_to='profileImg/',blank=True )
 
     def save(self, *args, **kwargs):
-        self.createDefaultImg()
+        if self.img == None:
+            self.createDefaultImg()
+
         super().save(*args, **kwargs)
 
     def createDefaultImg(self):

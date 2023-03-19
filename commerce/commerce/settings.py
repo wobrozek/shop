@@ -50,6 +50,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'auctions',
     'debug_toolbar',
     'django.contrib.admin',
@@ -60,6 +61,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
 ]
+
+ASGI_APPLICATION = 'commerce.asgi.application'
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
