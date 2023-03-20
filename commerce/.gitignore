@@ -5,6 +5,7 @@
 __pycache__
 db.sqlite3
 media
+passwords.py
 
 # Backup files #
 *.bak

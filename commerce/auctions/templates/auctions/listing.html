@@ -24,7 +24,16 @@
             <li class="list-group-item">Auction expire date: {{ auction.endDate| date:" d-m-Y H:i" }}</li>
         </ul>
 
+           {% if user.is_authenticated %}
+                <form class="d-flex gap-3 align-items-center" action="/listing/comments/{{ auction.id }}" method="post" id="historyForm" >
+                    {% csrf_token %}
+                    {{ formBid }}
+                    <input type="submit" class="btn btn-success" value="send">
+                </form>
+            {% endif %}
     </section>
+
+
 
     <h3>History</h3>
     <section class="recycleView">
@@ -53,10 +62,10 @@
 <h3>Comments</h3>
 
 {% if user.is_authenticated %}
-    <form class="d-flex gap-3 align-items-center" action="/listing/comments/{{ auction.id }}" method="post">
+    <form class="d-flex gap-3 align-items-center" action="/listing/comments/{{ auction.id }}" method="post" id="commentForm">
         {% csrf_token %}
         {{formComments}}
-        <input type="submit" class="btn btn-success">
+        <input type="submit" class="btn btn-success" value="send">
     </form>
 {% endif %}
 

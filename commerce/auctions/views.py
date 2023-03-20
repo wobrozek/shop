@@ -10,6 +10,8 @@ from django.contrib import messages
 from PIL import ImageDraw,Image
 
 from .models import User, Auction, Bid ,Comment
+from .tasks import send_mails
+
 
 def index(request):
     return render(request, "auctions/index.html",{
@@ -37,6 +39,9 @@ def create_view(request):
             aukcja = form.save(commit=False)
             aukcja.author = request.user
             aukcja.save()
+
+            # add task to cellery schedule
+            send_mails("wobrozek@gmail.com",32)
             
             return HttpResponseRedirect(f"/listing/{aukcja.id}")
         else:
