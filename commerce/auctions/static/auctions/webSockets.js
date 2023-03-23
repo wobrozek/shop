@@ -8,12 +8,19 @@ window.onload=(e)=>{
    let historyList=document.getElementById('recycleView-history')
    let commentList=document.getElementById('recycleView-comment')
 
-   const user_id = JSON.parse(document.getElementById('user_username').textContent);
+   const user_username = JSON.parse(document.getElementById('user_username').textContent);
    const user_img = JSON.parse(document.getElementById('user_img').textContent);
+   const auction_author = JSON.parse(document.getElementById('auction_author').textContent);
 
 
    historyForm?.addEventListener("submit",(e)=>{
        e.preventDefault()
+       if(user_username==auction_author){
+            socket.send(JSON.stringify({
+            "type":"end"
+           }))
+           return
+       }
        let bid = e.target[1].value
        socket.send(JSON.stringify({
             "type":"bid",
@@ -23,7 +30,7 @@ window.onload=(e)=>{
        }))
    })
 
-   commentForm.addEventListener("submit",(e)=>{
+   commentForm?.addEventListener("submit",(e)=>{
        e.preventDefault()
        let comment = e.target[1].value
        socket.send(JSON.stringify({

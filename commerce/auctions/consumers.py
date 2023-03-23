@@ -18,6 +18,8 @@ class HistoryConsumer(WebsocketConsumer):
     def receive(self, text_data):
         data=json.loads(text_data)
 
+        if data["type"] == "end":
+            return
 
         if data["type"]=="bid":
             price = int(data["value"])

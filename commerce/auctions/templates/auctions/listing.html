@@ -5,6 +5,7 @@
 <!--for js -->
 {{user.username|json_script:"user_username"}}
 {{user.img.url|json_script:"user_img"}}
+{{auction.author.username|json_script:"auction_author"}}
 
 {% if close %}
     {% if winnerBid %}
@@ -27,13 +28,7 @@
             <li class="list-group-item">Auction was created: {{ auction.startDate| date:"d-m-Y H:i" }} </li>
             <li class="list-group-item">Auction expire date: {{ auction.endDate| date:" d-m-Y H:i" }}</li>
         </ul>
-           {% if user.is_authenticated and not close %}
-                <form class="d-flex gap-3 align-items-center" action="/listing/comments/{{ auction.id }}" method="post" id="historyForm" >
-                    {% csrf_token %}
-                    {{ formBid }}
-                    <input type="submit" class="btn btn-success" value="send">
-                </form>
-            {% endif %}
+
     </section>
 
 

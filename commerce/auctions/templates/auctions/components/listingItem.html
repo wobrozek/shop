@@ -16,7 +16,7 @@
             {% if formBid %}
                 {% if user.is_authenticated and not close %}
 
-                <form  class="d-flex justify-content-between align-items-center" action="" method="post">       
+                <form  class="d-flex justify-content-between align-items-center" action="" method="post" id="historyForm">
                     {% csrf_token %}
                     <div class="auction-price">
                         Price: {{ auction.price }}
