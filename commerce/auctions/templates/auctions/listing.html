@@ -2,12 +2,16 @@
 
 {% block body%}
 
+<!--for js -->
+{{user.username|json_script:"user_username"}}
+{{user.img.url|json_script:"user_img"}}
+
 {% if close %}
-{% if winnerBid %}
-    <div class="winner">🏆Auction is closed and the winner is: {{winnerBid.author }}🏆</div>
-{% else %}
-    <div class="winner" >❌Auction is closed and nobody wins the auction❌</div>
-{% endif %}
+    {% if winnerBid %}
+        <div class="winner">🏆Auction is closed and the winner is: {{winnerBid.author }}🏆</div>
+    {% else %}
+        <div class="winner" >❌Auction is closed and nobody wins the auction❌</div>
+    {% endif %}
 {% endif %}
 
 <main>
@@ -23,8 +27,7 @@
             <li class="list-group-item">Auction was created: {{ auction.startDate| date:"d-m-Y H:i" }} </li>
             <li class="list-group-item">Auction expire date: {{ auction.endDate| date:" d-m-Y H:i" }}</li>
         </ul>
-
-           {% if user.is_authenticated %}
+           {% if user.is_authenticated and not close %}
                 <form class="d-flex gap-3 align-items-center" action="/listing/comments/{{ auction.id }}" method="post" id="historyForm" >
                     {% csrf_token %}
                     {{ formBid }}
@@ -44,9 +47,9 @@
         {% for bid in historyBid %}            
                 <li class="d-flex justify-content-between align-content-center recycleView-bid">
                     <div class="d-flex">
-                        <button class="image-circleWraper" >
+                        <div class="image-circleWraper" >
                             <img src={{bid.author.img}} alt="profile image">
-                        </button>
+                        </div>
                         {{ bid.author }}
                     </div>
                     <div>
@@ -77,9 +80,9 @@
     {% for comment in comments %}            
             <li class="d-flex justify-content-between align-content-center recycleView-bid">
                 <div class="d-flex">
-                    <button class="image-circleWraper" >
+                    <div class="image-circleWraper" >
                         <img src={{ comment.author.img }} alt="profile image">
-                    </button>
+                    </div>
                     <div class="d-flex flex-column">
                         <div>{{ comment.author }}</div>
                         <div>{{ comment.text }}</div>

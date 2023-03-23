@@ -8,6 +8,8 @@ function connect(url,target){
     socket.onmessage = (e)=>{
         let data = JSON.parse(e.data)
 
+        console.log(data)
+
         if(data.type === 'comment'){
             console.log(data)
         }
@@ -19,15 +21,24 @@ function connect(url,target){
     return socket
 }
 
+
+
 window.onload=(e)=>{
    let historyForm=document.getElementById('historyForm')
    let commentForm=document.getElementById('commentForm')
 
-   historyForm.addEventListener("submit",(e)=>{
+   const user_id = JSON.parse(document.getElementById('user_username').textContent);
+   const user_img = JSON.parse(document.getElementById('user_img').textContent);
+
+
+   historyForm?.addEventListener("submit",(e)=>{
        e.preventDefault()
        let bid = e.target[1].value
        socket.send(JSON.stringify({
-            "bid":bid
+            "type":"bid",
+            "value":bid,
+            "user":user_id,
+            "img":user_img
        }))
    })
 
@@ -35,7 +46,10 @@ window.onload=(e)=>{
        e.preventDefault()
        let comment = e.target[1].value
        socket.send(JSON.stringify({
-            "comment":comment
+            "type":"comment",
+            "value":comment,
+            "user":user_id,
+            "img":user_img
        }))
        commentForm.reset()
 

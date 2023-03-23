@@ -14,37 +14,35 @@ class HistoryConsumer(WebsocketConsumer):
 
         self.accept()
 
-        self.send(text_data=json.dumps({
-            'type':'connection_esabilished',
-            'message':'udalo sie'
-        }))
 
     def receive(self, text_data):
         data=json.loads(text_data)
+        print(data)
 
-        if 'bid' in data:
-            print(data['bid'])
-            async_to_sync(self.channel_layer.group_send)(
-                self.room_group_name,
-                {
-                'type': "send_group",
-                'message': "sieam"
-                }
-            )
 
-        if 'comment' in data:
-            print(data['comment'])
+        if data["type"]=="bid":
+            if data["value"]<0:
+                self.send(text_data=json.dumps({
+                'type': "send_error",
+                "value": "Your offer must be higher than previous offert",
+                }))
+                return
+
+        
             self.send(text_data=json.dumps({
                 'type': "send_group",
-                "message":'hej'
+                "value":data["value"],
+                "user":data["user"],
+                "img":data["img"]
             }))
 
     def send_group(self,event):
-        bid=event['message']
 
         self.send(text_data=json.dumps({
-            'type':'bid',
-            'price':bid
+            'type': event["type"],
+            "value":event["value"],
+            "user":event["user"],
+            "img":event["img"]
         }))
 
 #
