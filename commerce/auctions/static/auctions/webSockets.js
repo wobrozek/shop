@@ -1,31 +1,12 @@
-let listingId = window.location.pathname.split('/')[2]
-let socket=connect(`ws://${window.location.host}/ws/history/${listingId}`,"target")
-
-
-function connect(url,target){
-    let socket= new WebSocket(url)
-
-    socket.onmessage = (e)=>{
-        let data = JSON.parse(e.data)
-
-        console.log(data)
-
-        if(data.type === 'comment'){
-            console.log(data)
-        }
-
-        if(data.type === 'bid'){
-            console.log(data)
-        }
-    }
-    return socket
-}
-
-
-
 window.onload=(e)=>{
+    // connection with websocket
+    let listingId = window.location.pathname.split('/')[2]
+    let socket=connect(`ws://${window.location.host}/ws/history/${listingId}`,"target")
+
    let historyForm=document.getElementById('historyForm')
    let commentForm=document.getElementById('commentForm')
+   let historyList=document.getElementById('recycleView-history')
+   let commentList=document.getElementById('recycleView-comment')
 
    const user_id = JSON.parse(document.getElementById('user_username').textContent);
    const user_img = JSON.parse(document.getElementById('user_img').textContent);
@@ -56,4 +37,52 @@ window.onload=(e)=>{
    })
 
 
+   function connect(url,target){
+    let socket= new WebSocket(url)
+
+    socket.onmessage = (e)=>{
+        let data = JSON.parse(e.data)
+        console.log(data)
+
+        addToRecykleView(data)
+    }
+    return socket
 }
+
+   function addToRecykleView(dict){
+    if (dict['type']==="comment"){
+        commentList.innerHTML+=`            
+        <li class="d-flex justify-content-between align-content-center recycleView-bid">
+            <div class="d-flex">
+                <div class="image-circleWraper" >
+                    <img src=${dict["img"]} alt="profile image">
+                </div>
+                <div class="d-flex flex-column">
+                    <div>${dict["user"]}</div>
+                    <div>${dict["value"]}</div>
+                </div>
+            </div>
+        </li>`
+    }
+
+    if(dict['type']==="bid"){
+        historyList.innerHTML+=`               
+        <li class="d-flex justify-content-between align-content-center recycleView-bid">
+        <div class="d-flex">
+            <div class="image-circleWraper" >
+                <img src=${dict["img"]} alt="profile image">
+            </div>
+            ${dict["user"]}
+        </div>
+        <div>
+            ${dict["value"]} PLN
+        </div>
+    </li>`
+    }
+        
+
+}
+
+
+}
+

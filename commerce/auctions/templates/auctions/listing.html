@@ -40,7 +40,7 @@
 
     <h3>History</h3>
     <section class="recycleView">
-        <ul>
+        <ul id="recycleView-history">
         {% if not historyBid %}
             <div class="py-2">Nobody bids this auction yet💤</div>
         {% else %}
@@ -73,7 +73,7 @@
 {% endif %}
 
 <section class="recycleView">
-    <ul>
+    <ul id="recycleView-comment">
     {% if not comments %}
         <div class="py-2">Nobody comment this auction yet💤</div>
     {% else %}

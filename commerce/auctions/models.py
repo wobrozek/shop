@@ -10,10 +10,11 @@ class User(AbstractUser, models.Model):
     img = models.ImageField(upload_to='profileImg/',blank=True )
 
     def save(self, *args, **kwargs):
-        if self.img == None:
+        super().save(*args, **kwargs)
+        if self.img == "":
             self.createDefaultImg()
 
-        super().save(*args, **kwargs)
+
 
     def createDefaultImg(self):
         img = Image.new('RGB',(100,100),color=(189, 195, 199))

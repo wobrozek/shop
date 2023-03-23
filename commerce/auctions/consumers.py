@@ -17,40 +17,43 @@ class HistoryConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         data=json.loads(text_data)
-        print(data)
 
 
         if data["type"]=="bid":
-            if data["value"]<0:
-                self.send(text_data=json.dumps({
-                'type': "send_error",
-                "value": "Your offer must be higher than previous offert",
-                }))
+            price = int(data["value"])
+            if price<0:
+                async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        'type': "send_error",
+                        "value": "Your offer must be higher than previous offert",
+                    }
+                )
                 return
 
-        
-            self.send(text_data=json.dumps({
-                'type': "send_group",
-                "value":data["value"],
-                "user":data["user"],
-                "img":data["img"]
-            }))
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                "type":"send_group",
+                "form_type": data["type"],
+                "value": data["value"],
+                "user": data["user"],
+                "img": data["img"]
+            }
+        )
 
     def send_group(self,event):
 
         self.send(text_data=json.dumps({
-            'type': event["type"],
+            'type': event["form_type"],
             "value":event["value"],
             "user":event["user"],
             "img":event["img"]
         }))
 
-#
-# class commentConsumer(WebsocketConsumer,id):
-#     def connect(self):
-#         self.accept()
-#
-#         self.send(text_data=json.dumps({
-#             'type':'connection_esabilished',
-#             "message":"udalo sie"
-#         }))
+    def send_error(self,event):
+
+        self.send(text_data=json.dumps({
+            'type': "error",
+            "value":event["value"]
+        }))

@@ -40,8 +40,6 @@ def create_view(request):
             aukcja.author = request.user
             aukcja.save()
 
-            # add task to cellery schedule
-            send_mails("wobrozek@gmail.com",32)
             
             return HttpResponseRedirect(f"/listing/{aukcja.id}")
         else:
