@@ -8,6 +8,7 @@ window.onload=(e)=>{
    let historyList=document.getElementById('recycleView-history')
    let commentList=document.getElementById('recycleView-comment')
    let priceDiv=document.querySelector('.auction-price')
+   let errorDiv=document.querySelector('.errorspan')
 
 
    const user_id = JSON.parse(document.getElementById('user_id').textContent);
@@ -53,6 +54,10 @@ window.onload=(e)=>{
     socket.onmessage = (e)=>{
         let data = JSON.parse(e.data)
 
+        if(data['type']==="error"){
+        errorDiv.innerText=data['value']
+        }
+
         addToRecykleView(data)
     }
     return socket
@@ -76,6 +81,8 @@ window.onload=(e)=>{
                 </div>
             </div>
         </li>`
+
+
     }
 
     if(dict['type']==="bid"){
@@ -97,6 +104,8 @@ window.onload=(e)=>{
             ${dict["value"]} PLN
         </div>
     </li>`
+
+    errorDiv.innerText=""
     }
         
 

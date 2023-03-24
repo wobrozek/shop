@@ -95,9 +95,9 @@ button {
     gap: 3px;
 }
 
-/* .errorlist {
+.errorlist {
     display: none;
-} */
+}
 
 .errorspan {
     position: absolute;

@@ -35,17 +35,19 @@ class HistoryConsumer(WebsocketConsumer):
         user=User.objects.get(id=int(data["user_id"]))
         auction = Auction.objects.get(id=int(data["auction_id"]))
 
-        if auction.close==True:
-            async_to_sync(self.channel_layer.group_send)(
-                self.room_group_name,
-                {
-                    'type': "send_error",
-                    "value": "The auction is closed",
-                }
-            )
-            return
+
 
         if data["type"]=="bid":
+            if auction.close == True:
+                async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        'type': "send_error",
+                        "value": "The auction is closed",
+                    }
+                )
+                return
+            # validate bid
             price = float(data["value"])
             if price< auction.price:
                 async_to_sync(self.channel_layer.group_send)(
@@ -57,6 +59,7 @@ class HistoryConsumer(WebsocketConsumer):
                 )
                 return
             else:
+                # save bid
                 newOffer=Bid(price=price,author=user,auction=auction)
                 newOffer.save()
                 auction.price=price
