@@ -7,15 +7,17 @@ window.onload=(e)=>{
    let commentForm=document.getElementById('commentForm')
    let historyList=document.getElementById('recycleView-history')
    let commentList=document.getElementById('recycleView-comment')
+   let priceDiv=document.querySelector('.auction-price')
 
-   const user_username = JSON.parse(document.getElementById('user_username').textContent);
-   const user_img = JSON.parse(document.getElementById('user_img').textContent);
-   const auction_author = JSON.parse(document.getElementById('auction_author').textContent);
+
+   const user_id = JSON.parse(document.getElementById('user_id').textContent);
+   const auction_id = JSON.parse(document.getElementById('auction_id').textContent);
+   const auction_author_id = JSON.parse(document.getElementById('auction_author_id').textContent);
 
 
    historyForm?.addEventListener("submit",(e)=>{
 
-       if(user_username==auction_author){
+       if(user_id==auction_author_id){
            return
        }
 
@@ -23,9 +25,11 @@ window.onload=(e)=>{
        let bid = e.target[1].value
        socket.send(JSON.stringify({
             "type":"bid",
+            "type":"bid",
             "value":bid,
-            "user":user_username,
-            "img":user_img
+            "user_id":user_id,
+            "auction_id":auction_id
+
        }))
    })
 
@@ -35,8 +39,8 @@ window.onload=(e)=>{
        socket.send(JSON.stringify({
             "type":"comment",
             "value":comment,
-            "user":user_username,
-            "img":user_img
+            "user_id":user_id,
+            "auction_id":auction_id
        }))
        commentForm.reset()
 
@@ -48,7 +52,6 @@ window.onload=(e)=>{
 
     socket.onmessage = (e)=>{
         let data = JSON.parse(e.data)
-        console.log(data)
 
         addToRecykleView(data)
     }
@@ -57,7 +60,11 @@ window.onload=(e)=>{
 
    function addToRecykleView(dict){
     if (dict['type']==="comment"){
-        commentList.innerHTML+=`            
+    //  delete empty palceholder if exist
+        let toDelete=commentList.querySelector('.deleteIfNotEmpty')
+        toDelete?.remove()
+
+        commentList.innerHTML+=`
         <li class="d-flex justify-content-between align-content-center recycleView-bid">
             <div class="d-flex">
                 <div class="image-circleWraper" >
@@ -72,7 +79,13 @@ window.onload=(e)=>{
     }
 
     if(dict['type']==="bid"){
-        historyList.innerHTML+=`               
+        historyForm.reset()
+        priceDiv.innerText=`Price: ${dict["value"]}`
+        //  delete empty palceholder if exist
+        let toDelete=historyList.querySelector('.deleteIfNotEmpty')
+        toDelete?.remove()
+
+        historyList.innerHTML+=`
         <li class="d-flex justify-content-between align-content-center recycleView-bid">
         <div class="d-flex">
             <div class="image-circleWraper" >
