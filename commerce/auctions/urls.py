@@ -17,7 +17,6 @@ urlpatterns = [
     #listing path and forms
     path("listing/<int:listing_id>", views.listing_view, name="listing"),
     path("listing/watchlist/<int:listing_id>", views.add_watchlist_view, name="addWachList"),
-    path("listing/comments/<int:listing_id>", views.add_comment_view, name="addComments")
 ]
 
 # filles

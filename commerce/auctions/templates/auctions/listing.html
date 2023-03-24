@@ -60,7 +60,7 @@
 <h3>Comments</h3>
 
 {% if user.is_authenticated %}
-    <form class="d-flex gap-3 align-items-center" action="/listing/comments/{{ auction.id }}" method="post" id="commentForm">
+    <form class="d-flex gap-3 align-items-center" action="" method="post" id="commentForm">
         {% csrf_token %}
         {{formComments}}
         <input type="submit" class="btn btn-success" value="send">

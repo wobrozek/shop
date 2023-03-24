@@ -58,15 +58,13 @@
                 {% comment %} follow button {% endcomment %}
 
     {% if user.is_authenticated %}
-        <div class="absolute-right-up">        
-            <form action="/listing/watchlist/{{ auction.id }}" method="post">
+        <div class="absolute-right-up">
                 {% csrf_token %}
                 {% if follow %}
-                <button class="btn" type="submit" ><i class="bi bi-star-fill"></i></button>
+                <button ><i class="star watchstar" data-id={{auction.id}}></i></button>
                 {% else %}
-                <button class="btn" type="submit" ><i class="bi bi-star"></i></button>
+                <button ><i class="star star-active watchstar" data-id={{auction.id}}></i></button>
                 {% endif %}
-            </form>
         </div>
     {% endif %}
 

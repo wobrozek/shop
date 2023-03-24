@@ -126,3 +126,13 @@ main {
     display: block;
     margin: auto;
 }
+
+.star::before{
+    content: "\f586";
+    font-family:bootstrap-icons !important;
+    font-style: normal;
+}
+
+.star-active::before{
+    content: "\f588" !important;
+}

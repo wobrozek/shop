@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -102,32 +102,18 @@ def create_contex(listing_id,request):
             "close":auction.close,"winnerBid":winnerBid,
             "comments":comments}
 
-@login_required
-def add_comment_view(request,listing_id):
-    context=create_contex(listing_id,request)
-
-    if request.method=="POST":
-        if context["formComments"].is_valid():
-            comment = context["formComments"].save(commit=False)
-            comment.auction = context["auction"]
-            comment.author = request.user
-            comment.save()
-            return HttpResponseRedirect(f"/listing/{context['auction'].id}")
-
-    return HttpResponseRedirect(f"/listing/{context['auction'].id}")
-
 
 @login_required
 def add_watchlist_view(request,listing_id):
-    context=create_contex(listing_id,request)
+    auction=Auction.objects.get(id=listing_id)
 
-    if request.method=="POST":
-        if context["follow"]:
-            context["auction"].subscribers.remove(request.user)
-        else:
-            context["auction"].subscribers.add(request.user)
+    if request.user in auction.subscribers.all():
+        auction.subscribers.remove(request.user)
+    else:
+        auction.subscribers.add(request.user)
 
-    return HttpResponseRedirect(f"/listing/{context['auction'].id}")
+    return JsonResponse({}, status=200)
+
 
 def listing_view(request,listing_id):
     context=create_contex(listing_id,request)
