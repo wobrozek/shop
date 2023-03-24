@@ -14,18 +14,17 @@ window.onload=(e)=>{
 
 
    historyForm?.addEventListener("submit",(e)=>{
-       e.preventDefault()
+
        if(user_username==auction_author){
-            socket.send(JSON.stringify({
-            "type":"end"
-           }))
            return
        }
+
+       e.preventDefault()
        let bid = e.target[1].value
        socket.send(JSON.stringify({
             "type":"bid",
             "value":bid,
-            "user":user_id,
+            "user":user_username,
             "img":user_img
        }))
    })
@@ -36,7 +35,7 @@ window.onload=(e)=>{
        socket.send(JSON.stringify({
             "type":"comment",
             "value":comment,
-            "user":user_id,
+            "user":user_username,
             "img":user_img
        }))
        commentForm.reset()

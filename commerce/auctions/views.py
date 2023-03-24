@@ -138,6 +138,8 @@ def listing_view(request,listing_id):
         if context["owner"]==True:
             context["auction"].close=True
             context["auction"].save()
+            context["close"]=True
+            print(context)
             return render(request, "auctions/listing.html", context)
 
         # if user is not owner and place a bid
