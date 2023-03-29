@@ -112,7 +112,7 @@ def add_watchlist_view(request,listing_id):
     else:
         auction.subscribers.add(request.user)
 
-    return JsonResponse({}, status=200)
+    return JsonResponse({'watchList':request.user.watchlist.all().count()}, status=200)
 
 
 def listing_view(request,listing_id):
