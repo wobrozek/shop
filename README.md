@@ -16,7 +16,7 @@ https://user-images.githubusercontent.com/64639878/229930149-7da2a9d2-f2b1-41d6-
 
 # Features
 ## Api 
-Some futures on website are using http api to provide changes on site without refreshing
+Some features on website are using http api to provide changes on site without refreshing
 
 ## Web Sockets 
 Website is using Django channels due to users get instant information about current prices and comments on listing site
